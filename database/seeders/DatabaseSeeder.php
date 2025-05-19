@@ -18,6 +18,9 @@ class DatabaseSeeder extends Seeder
         // Run the role seeder first
         $this->call(RoleSeeder::class);
 
+        // Create superadmin from .env
+        $this->call(SuperAdminSeeder::class);
+
         // Create admin user
         User::create([
             'name' => 'Admin User',
@@ -36,6 +39,10 @@ class DatabaseSeeder extends Seeder
 
         // Create some sample products
         $this->createSampleProducts();
+
+        $this->call([
+            RolesAndPermissionsSeeder::class,
+        ]);
     }
 
     /**

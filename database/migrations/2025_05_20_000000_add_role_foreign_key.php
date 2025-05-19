@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('roles', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('description')->nullable();
-            $table->timestamps();
-        });
-
+        // Add foreign key constraint after both tables exist
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('role_id')->default(2)->after('email'); // 2 will be the 'user' role
+            // Using the table name from the permission package
+            $table->foreign('role_id')
+                ->references('id')
+                ->on(config('permission.table_names.roles', 'roles'))
+                ->onDelete('set null');
         });
     }
 
@@ -29,9 +27,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('role_id');
+            $table->dropForeign(['role_id']);
         });
-
-        Schema::dropIfExists('roles');
     }
 };
