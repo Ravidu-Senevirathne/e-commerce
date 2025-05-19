@@ -52,7 +52,7 @@
                         <h3 class="text-lg font-semibold text-gray-900">{{ $product->name }}</h3>
                         <p class="mt-1 text-gray-600 line-clamp-2">{{ $product->description }}</p>
                         <div class="mt-3 flex items-center justify-between">
-                            <span class="text-lg font-bold text-indigo-600">${{ number_format($product->price, 2) }}</span>
+                            <span class="text-lg font-bold text-indigo-600">LKR {{ number_format($product->price, 2) }}</span>
                             <a href="{{ route('products.show', $product) }}" class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200">
                                 View Details
                             </a>
