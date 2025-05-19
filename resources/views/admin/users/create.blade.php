@@ -1,20 +1,19 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit User')
+@section('title', 'Add New User')
 
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h5>Edit User: {{ $user->name }}</h5>
+        <h5>Add New User</h5>
     </div>
     <div class="card-body">
-        <form action="{{ route('admin.users.update', $user) }}" method="POST">
+        <form action="{{ route('admin.users.store') }}" method="POST">
             @csrf
-            @method('PUT')
 
             <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $user->name) }}">
+                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}">
                 @error('name')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
@@ -22,7 +21,7 @@
 
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $user->email) }}">
+                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}">
                 @error('email')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
@@ -31,7 +30,6 @@
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password">
-                <small class="form-text text-muted">Leave empty to keep current password</small>
                 @error('password')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
@@ -48,7 +46,7 @@
                     @foreach($roles as $role)
                     <div class="col-md-4">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="roles[]" value="{{ $role->name }}" id="role_{{ $role->id }}" {{ in_array($role->name, $userRoles) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="roles[]" value="{{ $role->name }}" id="role_{{ $role->id }}">
                             <label class="form-check-label" for="role_{{ $role->id }}">
                                 {{ ucfirst($role->name) }}
                             </label>
@@ -63,7 +61,7 @@
 
             <div class="d-flex justify-content-between">
                 <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">Cancel</a>
-                <button type="submit" class="btn btn-primary">Update User</button>
+                <button type="submit" class="btn btn-primary">Save User</button>
             </div>
         </form>
     </div>

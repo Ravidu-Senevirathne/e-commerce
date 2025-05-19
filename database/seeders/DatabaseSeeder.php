@@ -15,34 +15,32 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Run the role seeder first
-        $this->call(RoleSeeder::class);
+        // First reset the permissions cache and set up roles and permissions
+        $this->call([
+            RolesAndPermissionsSeeder::class,
+        ]);
 
         // Create superadmin from .env
         $this->call(SuperAdminSeeder::class);
 
         // Create admin user
-        User::create([
+        $admin = User::create([
             'name' => 'Admin User',
             'email' => 'admin@example.com',
             'password' => Hash::make('password'),
-            'role_id' => 1, // Admin role
         ]);
+        $admin->assignRole('admin');
 
         // Create regular user
-        User::create([
+        $user = User::create([
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => Hash::make('password'),
-            'role_id' => 2, // Regular user role
         ]);
+        $user->assignRole('user');
 
         // Create some sample products
         $this->createSampleProducts();
-
-        $this->call([
-            RolesAndPermissionsSeeder::class,
-        ]);
     }
 
     /**

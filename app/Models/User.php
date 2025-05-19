@@ -54,6 +54,28 @@ class User extends Authenticatable
      */
     public function isAdmin()
     {
-        return $this->hasRole('admin');
+        $roles = $this->roles()->pluck('name')->toArray();
+        $directCheckResult = $this->hasRole('admin');
+        $hasPermissionCheck = $this->hasPermissionTo('view users');
+
+        \Log::debug('User::isAdmin detailed check for ' . $this->email, [
+            'roles' => $roles,
+            'directRoleCheck' => $directCheckResult,
+            'hasAdminPermission' => $hasPermissionCheck
+        ]);
+
+        return $directCheckResult;
+    }
+
+    /**
+     * Check if user has admin access
+     * 
+     * @return bool
+     */
+    public function hasAdminAccess()
+    {
+        $hasAccess = $this->hasPermissionTo('view users') || $this->hasRole('admin');
+        \Log::debug('User::hasAdminAccess check for ' . $this->email . ': ' . ($hasAccess ? 'true' : 'false'));
+        return $hasAccess;
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,7 +29,14 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // Check if user is admin and redirect accordingly
+        if (Auth::user()->hasRole('admin')) {
+            \Log::info('Admin user logged in: ' . Auth::user()->email . ' - Redirecting to admin dashboard');
+            return redirect()->intended(route('admin.dashboard'));
+        }
+
+        \Log::info('Regular user logged in: ' . Auth::user()->email . ' - Redirecting to dashboard');
+        return redirect()->intended(RouteServiceProvider::HOME);
     }
 
     /**

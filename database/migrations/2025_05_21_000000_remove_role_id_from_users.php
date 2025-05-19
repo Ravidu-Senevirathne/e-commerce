@@ -11,26 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // First drop the foreign key constraint if it exists
-        Schema::table('users', function (Blueprint $table) {
-            // Check if the foreign key exists before trying to drop it
-            $foreignKeys = Schema::getConnection()
-                ->getDoctrineSchemaManager()
-                ->listTableForeignKeys('users');
-
-            $foreignKeyExists = collect($foreignKeys)
-                ->contains(function ($foreignKey) {
-                    return $foreignKey->getLocalColumns() === ['role_id'];
-                });
-
-            if ($foreignKeyExists) {
-                $table->dropForeign(['role_id']);
-            }
-        });
-
-        // Then drop the column
+        // Simply drop the column if it exists
         Schema::table('users', function (Blueprint $table) {
             if (Schema::hasColumn('users', 'role_id')) {
+                $table->dropForeign(['role_id']);
                 $table->dropColumn('role_id');
             }
         });
@@ -41,6 +25,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // Add the column back if needed
         Schema::table('users', function (Blueprint $table) {
             if (!Schema::hasColumn('users', 'role_id')) {
                 $table->unsignedBigInteger('role_id')->nullable();

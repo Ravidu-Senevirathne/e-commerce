@@ -10,15 +10,15 @@ class SuperAdminSeeder extends Seeder
 {
     /**
      * Create a superadmin user using environment variables.
-     */
-    public function run(): void
+     */    public function run(): void
     {
-        User::create([
-            'name' => env('SUPERADMIN_NAME',),
-            'email' => env('SUPERADMIN_EMAIL'),
-            'password' => Hash::make(env('SUPERADMIN_PASSWORD')),
-            'role_id' => 1, // Admin role
+        $superAdmin = User::create([
+            'name' => env('SUPERADMIN_NAME', 'Super Admin'),
+            'email' => env('SUPERADMIN_EMAIL', 'superadmin@example.com'),
+            'password' => Hash::make(env('SUPERADMIN_PASSWORD', 'password')),
         ]);
+
+        $superAdmin->assignRole('admin');
 
         $this->command->info('Superadmin user created successfully.');
     }

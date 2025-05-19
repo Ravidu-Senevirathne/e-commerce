@@ -13,6 +13,11 @@ class AdminController extends Controller
      */
     public function dashboard()
     {
+        // Check if user is admin
+        if (!auth()->user()->isAdmin()) {
+            return redirect()->route('dashboard');
+        }
+
         $totalProducts = Product::count();
         $totalUsers = User::count();
         $featuredProducts = Product::where('featured', true)->count();
